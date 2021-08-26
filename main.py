@@ -1,7 +1,9 @@
 import speech_recognition as sr
 import serial
-serialPort = serial.Serial(port="/dev/ttyACM0", baudrate=9600,
-                           bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+
+serialPort = serial.Serial(port="/dev/ttyACM0", baudrate=9600,bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+
+
 r = sr.Recognizer()
 with sr.Microphone() as source:
     while(1):
@@ -12,6 +14,8 @@ with sr.Microphone() as source:
             text = r.recognize_google(audio, language='es-DO')
             text_str = format(text)
             print('You said: '+text_str)
+
+
             if "Sofía" in text_str and "adelante" in text_str:
                 serialPort.write(b"w \r\n")
             elif "Sofía" in text_str and "derecha" in text_str:
@@ -20,5 +24,9 @@ with sr.Microphone() as source:
                 serialPort.write(b"s \r\n")
             elif "Sofía" in text_str and "izquierda" in text_str:
                 serialPort.write(b"a \r\n")
-        except:
-            print('Sorry could not hear')
+
+        except Exception as ex:
+            print('Sorry could not hear \n')
+            print("Error occured \n")
+            print(ex)
+
